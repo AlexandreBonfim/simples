@@ -1,6 +1,6 @@
 require 'pdf-reader'
 
-class PdfIdcParser
+class IdcParser
   attr_reader :file, :data
 
   def initialize(file_path)
@@ -17,7 +17,6 @@ class PdfIdcParser
   private
 
   def extract_text
-    puts "file: #{file.inspect} (#{file.class})"
     reader = PDF::Reader.new(file)
     reader.pages.map(&:text).join("\n")
   end
