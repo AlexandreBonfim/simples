@@ -11,6 +11,7 @@ class IdcParser
   def call
     text = extract_text
     parse_fields(text)
+    validate_required_fields!
     data
   end
 
@@ -27,5 +28,12 @@ class IdcParser
     data[:doc_type] = text[/DOC\.IDENTIFICATIVO:\s*(\S+)/, 1]
     data[:doc_number] = text[/NUM:\s*(\S+)/, 1]
     data[:start_date] = text[/ALTA:\s*(\d{2}-\d{2}-\d{4})/, 1]
+  end
+
+  def validate_required_fields!
+    %i[full_name start_date doc_number].each do |field|
+      value = data[field]
+      raise ArgumentError, "#{field} is required" if value.nil? || value.to_s.strip.empty?
+    end
   end
 end
